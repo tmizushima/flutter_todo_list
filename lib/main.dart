@@ -14,12 +14,23 @@ class MainApp extends StatelessWidget {
           title: Text("Sample App"),
           backgroundColor: Colors.blueAccent,
         ),
-        body: Stack(
-          children: <Widget>[
-            AppBackgroundPage(),
-            ShowTasks(),
-            ShowInputWidget(),
-          ],
+        body: Container(
+          child: Stack(
+            children: <Widget>[
+              AppBackgroundPage(),
+              Column(
+                children: <Widget>[
+                  Center(
+                    child: ShowInputWidget(),
+                  ),
+                  Positioned(
+                    top: 100,
+                    child: ShowTasks(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
