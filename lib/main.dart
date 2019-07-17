@@ -17,8 +17,17 @@ class MainApp extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             AppBackgroundPage(),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                child: Stack(
+                  children: <Widget>[
+                    ShowInputWidget(),
+                  ],
+                ),
+              ),
+            ),
             ShowTasks(),
-            ShowInputWidget(),
           ],
         ),
       ),
@@ -26,7 +35,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-///Show Input//////////////////////////
+///Show Input///////////////////////////////////////////////////////////////////////
 class ShowInputWidget extends StatefulWidget {
   ShowInputWidget({Key key}) : super(key: key);
   @override
@@ -37,64 +46,66 @@ class _ShowInputWidgetState extends State<ShowInputWidget> {
   final tasks = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: Key('tasks'),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: "Things to do",
-              contentPadding:
-                  const EdgeInsets.only(left: 19.0, bottom: 15.0, top: 15.0),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(25.7),
+    return Container(
+      child: Form(
+        key: Key('tasks'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: "Things to do",
+                contentPadding:
+                    const EdgeInsets.only(left: 19.0, bottom: 15.0, top: 15.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(25.7),
+                ),
               ),
-            ),
-            autofocus: false,
-            autocorrect: true,
-            validator: (value) {
-              if (value.isEmpty) {
-                return "Please type some text";
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(25.7)),
-              onPressed: () {
-                if (tasks.currentState.validate()) {
-                  // Process data.
+              autofocus: false,
+              autocorrect: true,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Please type some text";
                 }
+                return null;
               },
-              child: new SizedBox(
-                height: 40.0,
-                width: 40.0,
-                child: new IconButton(
-                  padding: new EdgeInsets.symmetric(vertical: 10.0),
-                  color: Colors.blueAccent,
-                  hoverColor: Colors.white,
-                  icon: Icon(
-                    IconData(57669, fontFamily: 'MaterialIcons'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: RaisedButton(
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(25.7)),
+                onPressed: () {
+                  if (tasks.currentState.validate()) {
+                    // Process data.
+                  }
+                },
+                child: new SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: new IconButton(
+                    padding: new EdgeInsets.symmetric(vertical: 10.0),
+                    color: Colors.blueAccent,
+                    hoverColor: Colors.white,
+                    icon: Icon(
+                      IconData(57669, fontFamily: 'MaterialIcons'),
+                    ),
+                    onPressed: () {},
                   ),
-                  onPressed: () {},
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-/////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 ////////////TASKS/////////////////////////////////////////////
 class ShowTasks extends StatefulWidget {
@@ -106,27 +117,29 @@ class _ShowTasksState extends State<ShowTasks> {
   final bool alreadySaved = true;
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(20.0),
-      children: <Widget>[
-        Card(
-          child: ListTile(
-            title: Text("This is a first card"),
-            trailing: IconButton(
-              icon: Icon(alreadySaved
-                  ? Icons.check_box_outline_blank
-                  : Icons.check_box),
-              onPressed: () {},
+    return Container(
+      child: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+        children: <Widget>[
+          Card(
+            child: ListTile(
+              title: Text("This is a first card"),
+              trailing: IconButton(
+                icon: Icon(alreadySaved
+                    ? Icons.check_box_outline_blank
+                    : Icons.check_box),
+                onPressed: () {},
+              ),
+              onTap: () {
+                setState(() {
+                  if (alreadySaved) {}
+                });
+              },
             ),
-            onTap: () {
-              setState(() {
-                if (alreadySaved) {}
-              });
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
-///////////--TASKS//////////////////////////////////////////////////
+///////////--TASKS////////////////////////////////////////////////////////////////////
