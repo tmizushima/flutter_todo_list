@@ -42,63 +42,50 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Form(
-          key: Key('tasks'),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextField(
-                controller: eCtrl,
-                onSubmitted: (text) {
-                  listItems.add(text);
-                  eCtrl.clear();
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Things to do",
-                  contentPadding: const EdgeInsets.only(
-                      left: 19.0, bottom: 15.0, top: 15.0),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(25.7),
-                  ),
-                ),
-                autofocus: false,
-                autocorrect: true,
+        TextField(
+          controller: eCtrl,
+          onSubmitted: (text) {
+            listItems.add(text);
+            eCtrl.clear();
+            setState(() {});
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Things to do",
+            contentPadding:
+                const EdgeInsets.only(left: 19.0, bottom: 15.0, top: 15.0),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(25.7),
+            ),
+          ),
+          autofocus: false,
+          autocorrect: true,
+        ),
+        RaisedButton(
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(25.7)),
+          onPressed: () {},
+          child: new SizedBox(
+            height: 40.0,
+            width: 40.0,
+            child: new IconButton(
+              padding: new EdgeInsets.symmetric(vertical: 10.0),
+              color: Colors.blueAccent,
+              hoverColor: Colors.white,
+              icon: Icon(
+                IconData(57669, fontFamily: 'MaterialIcons'),
               ),
-              RaisedButton(
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(25.7)),
-                onPressed: () {
-                  if (tasks.currentState.validate()) {
-                    // Process data.
-                  }
-                },
-                child: new SizedBox(
-                  height: 40.0,
-                  width: 40.0,
-                  child: new IconButton(
-                    padding: new EdgeInsets.symmetric(vertical: 10.0),
-                    color: Colors.blueAccent,
-                    hoverColor: Colors.white,
-                    icon: Icon(
-                      IconData(57669, fontFamily: 'MaterialIcons'),
-                    ),
-                    onPressed: () {
-                      listItems.add(eCtrl.text);
-                      eCtrl.clear();
-                      setState(() {});
-                    },
-                  ),
-                ),
-              ),
-            ],
+              onPressed: () {
+                listItems.add(eCtrl.text);
+                eCtrl.clear();
+                setState(() {});
+              },
+            ),
           ),
         ),
-        SizedBox(
-          height: 400,
+        Expanded(
           child: new ListView.builder(
             itemCount: listItems.length,
             scrollDirection: Axis.vertical,
@@ -106,11 +93,22 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
               return Card(
                 child: ListTile(
                   title: Text(listItems[index]),
-                  trailing: IconButton(
-                    icon: Icon(alreadySaved
-                        ? Icons.check_box_outline_blank
-                        : Icons.check_box),
-                    onPressed: () {},
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(alreadySaved
+                            ? Icons.remove_circle_outline
+                            : Icons.remove_circle),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(alreadySaved
+                            ? Icons.check_box_outline_blank
+                            : Icons.check_box),
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
                   onTap: () {
                     setState(() {
