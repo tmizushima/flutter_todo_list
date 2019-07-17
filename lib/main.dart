@@ -11,23 +11,13 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: new AppBar(
-          title: Text("Sample App"),
+          title: Text("To Do list App"),
           backgroundColor: Colors.blueAccent,
         ),
         body: Stack(
           children: <Widget>[
             AppBackgroundPage(),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                child: Stack(
-                  children: <Widget>[
-                    ShowInputWidget(),
-                  ],
-                ),
-              ),
-            ),
-            ShowTasks(),
+            InputFieldTasks(),
           ],
         ),
       ),
@@ -35,111 +25,102 @@ class MainApp extends StatelessWidget {
   }
 }
 
-///Show Input///////////////////////////////////////////////////////////////////////
-class ShowInputWidget extends StatefulWidget {
-  ShowInputWidget({Key key}) : super(key: key);
+/////////////////////////////////////////////////////////////////////////////////
+class InputFieldTasks extends StatefulWidget {
+  InputFieldTasks({Key key}) : super(key: key);
+
   @override
-  _ShowInputWidgetState createState() => _ShowInputWidgetState();
+  _InputFieldTasksState createState() => _InputFieldTasksState();
 }
 
-class _ShowInputWidgetState extends State<ShowInputWidget> {
+class _InputFieldTasksState extends State<InputFieldTasks> {
   final tasks = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Form(
-        key: Key('tasks'),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: "Things to do",
-                contentPadding:
-                    const EdgeInsets.only(left: 19.0, bottom: 15.0, top: 15.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(25.7),
-                ),
-              ),
-              autofocus: false,
-              autocorrect: true,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please type some text";
-                }
-                return null;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: RaisedButton(
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(25.7)),
-                onPressed: () {
-                  if (tasks.currentState.validate()) {
-                    // Process data.
-                  }
-                },
-                child: new SizedBox(
-                  height: 40.0,
-                  width: 40.0,
-                  child: new IconButton(
-                    padding: new EdgeInsets.symmetric(vertical: 10.0),
-                    color: Colors.blueAccent,
-                    hoverColor: Colors.white,
-                    icon: Icon(
-                      IconData(57669, fontFamily: 'MaterialIcons'),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-////////////////////////////////////////////////////////////////////////
-
-////////////TASKS/////////////////////////////////////////////
-class ShowTasks extends StatefulWidget {
-  @override
-  _ShowTasksState createState() => _ShowTasksState();
-}
-
-class _ShowTasksState extends State<ShowTasks> {
   final bool alreadySaved = true;
+  final List<String> listItems = [];
+  final TextEditingController eCtrl = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-        children: <Widget>[
-          Card(
-            child: ListTile(
-              title: Text("This is a first card"),
-              trailing: IconButton(
-                icon: Icon(alreadySaved
-                    ? Icons.check_box_outline_blank
-                    : Icons.check_box),
-                onPressed: () {},
+    return Column(
+      children: <Widget>[
+        TextField(
+          controller: eCtrl,
+          onSubmitted: (text) {
+            listItems.add(text);
+            eCtrl.clear();
+            setState(() {});
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Things to do",
+            contentPadding:
+                const EdgeInsets.only(left: 19.0, bottom: 15.0, top: 15.0),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(25.7),
+            ),
+          ),
+          autofocus: false,
+          autocorrect: true,
+        ),
+        RaisedButton(
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(25.7)),
+          onPressed: () {},
+          child: new SizedBox(
+            height: 40.0,
+            width: 40.0,
+            child: new IconButton(
+              padding: new EdgeInsets.symmetric(vertical: 10.0),
+              color: Colors.blueAccent,
+              hoverColor: Colors.white,
+              icon: Icon(
+                IconData(57669, fontFamily: 'MaterialIcons'),
               ),
-              onTap: () {
-                setState(() {
-                  if (alreadySaved) {}
-                });
+              onPressed: () {
+                listItems.add(eCtrl.text);
+                eCtrl.clear();
+                setState(() {});
               },
             ),
+          ),
+        ),
+        Expanded(
+          child: new ListView.builder(
+            itemCount: listItems.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: ListTile(
+                  title: Text(listItems[index]),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(alreadySaved
+                            ? Icons.remove_circle_outline
+                            : Icons.remove_circle),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(alreadySaved
+                            ? Icons.check_box_outline_blank
+                            : Icons.check_box),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    setState(() {
+                      if (alreadySaved) {}
+                    });
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 }
-///////////--TASKS////////////////////////////////////////////////////////////////////
