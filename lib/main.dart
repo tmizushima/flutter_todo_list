@@ -11,7 +11,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: new AppBar(
-          title: Text("Sample App"),
+          title: Text("To Do list App"),
           backgroundColor: Colors.blueAccent,
         ),
         body: Stack(
@@ -36,16 +36,24 @@ class InputFieldTasks extends StatefulWidget {
 class _InputFieldTasksState extends State<InputFieldTasks> {
   final tasks = GlobalKey<FormState>();
   final bool alreadySaved = true;
+  final List<String> listItems = [];
+  final TextEditingController eCtrl = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: <Widget>[
         Form(
           key: Key('tasks'),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TextFormField(
+              TextField(
+                controller: eCtrl,
+                onSubmitted: (text) {
+                  listItems.add(text);
+                  eCtrl.clear();
+                  setState(() {});
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -59,12 +67,6 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                 ),
                 autofocus: false,
                 autocorrect: true,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Please type some text";
-                  }
-                  return null;
-                },
               ),
               RaisedButton(
                 shape: new RoundedRectangleBorder(
@@ -84,26 +86,39 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                     icon: Icon(
                       IconData(57669, fontFamily: 'MaterialIcons'),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      listItems.add(eCtrl.text);
+                      eCtrl.clear();
+                      setState(() {});
+                    },
                   ),
                 ),
               ),
             ],
           ),
         ),
-        Card(
-          child: ListTile(
-            title: Text("This is a first card"),
-            trailing: IconButton(
-              icon: Icon(alreadySaved
-                  ? Icons.check_box_outline_blank
-                  : Icons.check_box),
-              onPressed: () {},
-            ),
-            onTap: () {
-              setState(() {
-                if (alreadySaved) {}
-              });
+        SizedBox(
+          height: 400,
+          child: new ListView.builder(
+            itemCount: listItems.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: ListTile(
+                  title: Text(listItems[index]),
+                  trailing: IconButton(
+                    icon: Icon(alreadySaved
+                        ? Icons.check_box_outline_blank
+                        : Icons.check_box),
+                    onPressed: () {},
+                  ),
+                  onTap: () {
+                    setState(() {
+                      if (alreadySaved) {}
+                    });
+                  },
+                ),
+              );
             },
           ),
         ),
