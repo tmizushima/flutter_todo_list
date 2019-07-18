@@ -35,8 +35,9 @@ class InputFieldTasks extends StatefulWidget {
 
 class _InputFieldTasksState extends State<InputFieldTasks> {
   final tasks = GlobalKey<FormState>();
-  final bool alreadySaved = true;
+  bool isChecked = false;
   final List<String> listItems = [];
+  final Set<String> _saved = Set<String>();
   final TextEditingController eCtrl = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -107,23 +108,36 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                       Expanded(child: Text(listItems[index])),
                       Container(
                         width: 40,
-                        child: GestureDetector(
+                        child: InkWell(
                             child: Icon(
                               Icons.remove_circle,
                               color: Colors.redAccent,
                             ),
                             onTap: () {
-                              print("Removed");
+                              listItems.removeAt(index);
+                              setState(() {});
                             }),
                       ),
                       Container(
-                        width: 30,
-                        child: GestureDetector(
-                            child: Icon(Icons.check_box_outline_blank),
+                          width: 30,
+                          child: InkWell(
                             onTap: () {
-                              print("Checked");
-                            }),
-                      ),
+                              isChecked = !isChecked;
+                              setState(() {
+                                // if (isChecked) {
+                                //   _saved.remove(index);
+                                // } else {
+                                //   _saved.add();
+                                // }
+                              });
+                            },
+                            child: Icon(
+                              isChecked
+                                  ? Icons.check_box_outline_blank
+                                  : Icons.check_box,
+                              color: Colors.greenAccent,
+                            ),
+                          )),
                     ],
                   ),
                   onTap: () {
