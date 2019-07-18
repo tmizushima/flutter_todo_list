@@ -36,9 +36,17 @@ class InputFieldTasks extends StatefulWidget {
 class _InputFieldTasksState extends State<InputFieldTasks> {
   final tasks = GlobalKey<FormState>();
   bool isChecked = false;
+  bool _validate = false;
+
   final List<String> listItems = [];
-  final Set<String> _saved = Set<String>();
   final TextEditingController eCtrl = new TextEditingController();
+
+  @override
+  void dispose() {
+    eCtrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,13 +61,19 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                 child: TextField(
                   controller: eCtrl,
                   onSubmitted: (text) {
-                    listItems.add(text);
-                    eCtrl.clear();
-                    setState(() {});
+                    if (text.isEmpty) {
+                      _validate = true;
+                    } else {
+                      _validate = false;
+                      listItems.add(text);
+                      eCtrl.clear();
+                      setState(() {});
+                    }
                   },
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Things to do",
+                    errorText: _validate ? 'Value Can\'t Be Empty' : null,
                     contentPadding: const EdgeInsets.only(
                         left: 25.0, bottom: 15.0, top: 15.0),
                     focusedBorder: OutlineInputBorder(
@@ -85,9 +99,15 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                       IconData(57669, fontFamily: 'MaterialIcons'),
                     ),
                     onPressed: () {
-                      listItems.add(eCtrl.text);
-                      eCtrl.clear();
-                      setState(() {});
+                      setState(() {
+                        if (eCtrl.text.isEmpty) {
+                          _validate = true;
+                        } else {
+                          _validate = false;
+                          listItems.add(eCtrl.text);
+                          eCtrl.clear();
+                        }
+                      });
                     },
                   ),
                 ),
@@ -123,13 +143,7 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                           child: InkWell(
                             onTap: () {
                               isChecked = !isChecked;
-                              setState(() {
-                                // if (isChecked) {
-                                //   _saved.remove(index);
-                                // } else {
-                                //   _saved.add();
-                                // }
-                              });
+                              setState(() {});
                             },
                             child: Icon(
                               isChecked
