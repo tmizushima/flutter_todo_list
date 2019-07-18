@@ -36,6 +36,7 @@ class InputFieldTasks extends StatefulWidget {
 class _InputFieldTasksState extends State<InputFieldTasks> {
   final tasks = GlobalKey<FormState>();
   bool isChecked = false;
+  //validate if the text field is null
   bool _validate = false;
 
   final List<String> listItems = [];
@@ -52,6 +53,7 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
     return Column(
       children: <Widget>[
         Container(
+          height: 70,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25.7), color: Colors.white),
           margin: EdgeInsets.all(5.0),
@@ -60,6 +62,18 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
               Expanded(
                 child: TextField(
                   controller: eCtrl,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Things to do",
+                    errorText: _validate ? 'The input is empty.' : null,
+                    contentPadding: const EdgeInsets.only(
+                        left: 25.0, bottom: 15.0, top: 15.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.7),
+                    ),
+                  ),
+                  autocorrect: true,
                   onSubmitted: (text) {
                     if (text.isEmpty) {
                       _validate = true;
@@ -70,22 +84,10 @@ class _InputFieldTasksState extends State<InputFieldTasks> {
                       setState(() {});
                     }
                   },
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Things to do",
-                    errorText: _validate ? 'Value Can\'t Be Empty' : null,
-                    contentPadding: const EdgeInsets.only(
-                        left: 25.0, bottom: 15.0, top: 15.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.7),
-                    ),
-                  ),
-                  autofocus: false,
-                  autocorrect: true,
                 ),
               ),
               Container(
+                height: 70,
                 child: RaisedButton(
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(25.7)),
