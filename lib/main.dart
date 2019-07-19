@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sample_app/app_background.dart';
-import 'completed_task_page.dart';
-import 'input_field_tasks.dart';
+import 'home_page.dart';
 
 void main() => runApp(MainApp());
 
@@ -11,29 +9,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: "Sample App",
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: new AppBar(
-          title: Text("To Do list App"),
-          backgroundColor: Colors.blueAccent,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.list),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new CompletedTaskPage()),
-                  );
-                }),
-          ],
-        ),
-        body: Stack(
-          children: <Widget>[
-            AppBackgroundPage(),
-            InputFieldTasks(),
-          ],
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }

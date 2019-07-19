@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+var inputFieldTasksKey = GlobalKey<_InputFieldTasksState>();
+
 class InputFieldTasks extends StatefulWidget {
+  final listItems;
+  final completedItems;
+  const InputFieldTasks({Key key, this.listItems, this.completedItems})
+      : super(key: key);
   @override
   _InputFieldTasksState createState() => _InputFieldTasksState();
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/input_field_tasks.dart';
 
-class CompletedTaskPage extends StatefulWidget {
-  final InputFieldTasks listItems, completedItems;
+var completedTaskPageKey = new GlobalKey<_CompletedTaskPageState>();
 
-  CompletedTaskPage({this.listItems, this.completedItems});
+class CompletedTaskPage extends StatefulWidget {
+  CompletedTaskPage({Key key}) : super(key: key);
 
   @override
   _CompletedTaskPageState createState() => _CompletedTaskPageState();
@@ -19,16 +19,19 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
         backgroundColor: Colors.blueAccent,
       ),
       body: new ListView.builder(
-        itemCount: this.widget.listItems.length,
-        itemBuilder: (context, i) => new Column(
-          children: <Widget>[
-            new Divider(
-              height: 10.0,
-            ),
-            new ListTile()
-          ],
-        ),
-      ),
+          itemCount: inputFieldTasksKey.currentState.listItems.length,
+          itemBuilder: (BuildContext context, int index) {
+            return new Column(
+              children: <Widget>[
+                new Divider(
+                  height: 10.0,
+                ),
+                new ListTile(
+                  title: Text(inputFieldTasksKey.currentState.listItems[index]),
+                )
+              ],
+            );
+          }),
     );
   }
 }
