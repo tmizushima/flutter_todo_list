@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               setState(() {});
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return new CompletedTaskPage();
-                }),
+                MaterialPageRoute(
+                  builder: (context) => new CompletedTasks(),
+                ),
               );
             },
           ),
@@ -179,18 +179,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-var completedTaskPageKey = new GlobalKey<_CompletedTaskPageState>();
-
-class CompletedTaskPage extends StatefulWidget {
+class CompletedTasks extends StatelessWidget {
   final HomePage listItems;
 
-  CompletedTaskPage({Key key, this.listItems}) : super(key: key);
-
-  @override
-  _CompletedTaskPageState createState() => _CompletedTaskPageState();
-}
-
-class _CompletedTaskPageState extends State<CompletedTaskPage> {
+  CompletedTasks({Key key, this.listItems}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -199,7 +191,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
         backgroundColor: Colors.blueAccent,
       ),
       body: new ListView.builder(
-          itemCount: HomePage.listItems.length,
+          itemCount: widget.listItems.length,
           itemBuilder: (BuildContext context, int index) {
             return new Column(
               children: <Widget>[
@@ -207,7 +199,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                   height: 10.0,
                 ),
                 new ListTile(
-                  title: Text(HomePage.listItems[index]),
+                  title: Text(widget.listItems[index]),
                 )
               ],
             );
