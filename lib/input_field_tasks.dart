@@ -6,7 +6,6 @@ class InputFieldTasks extends StatefulWidget {
 }
 
 class _InputFieldTasksState extends State<InputFieldTasks> {
-  bool isChecked = false;
   bool _validate = false;
   List<List<String>> list = [[]];
   List<String> listItems = [];
