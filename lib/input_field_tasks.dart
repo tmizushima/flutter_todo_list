@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 var inputFieldTasksKey = GlobalKey<_InputFieldTasksState>();
 
 class InputFieldTasks extends StatefulWidget {
-  final listItems;
-  final completedItems;
-  const InputFieldTasks({Key key, this.listItems, this.completedItems})
-      : super(key: key);
+  const InputFieldTasks({Key key}) : super(key: key);
   @override
   _InputFieldTasksState createState() => _InputFieldTasksState();
 }
@@ -14,8 +11,8 @@ class InputFieldTasks extends StatefulWidget {
 class _InputFieldTasksState extends State<InputFieldTasks> {
   bool _validate = false;
   List<List<String>> list = [[]];
-  List<String> listItems = [];
-  List<bool> completedItems = [];
+  static List<String> listItems = [];
+  static List<bool> completedItems = [];
   final TextEditingController eCtrl = new TextEditingController();
 
   @override
