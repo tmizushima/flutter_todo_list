@@ -11,7 +11,7 @@ class CompletedTasks extends StatelessWidget {
         backgroundColor: Colors.blueAccent,
       ),
       body: ListView.builder(
-          itemCount: listItems.length,
+          itemCount: completedItems.length,
           itemBuilder: (BuildContext context, int index) {
             if (completedItems[index]) {
               return Column(
@@ -25,9 +25,7 @@ class CompletedTasks extends StatelessWidget {
                 ],
               );
             } else {
-              return Center(
-                child: Text("No completed tasks yet"),
-              );
+              return Center();
             }
           }),
     );

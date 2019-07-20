@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_app/shared_prefs.dart';
 import 'app_background.dart';
 import 'completed_task_page.dart';
 
 var homePageKey = GlobalKey<_HomePageState>();
 
 List<String> listItems = [];
+// SharePrefs.getListItems()
 List<bool> completedItems = [];
 
 class HomePage extends StatefulWidget {
@@ -77,9 +79,10 @@ class _HomePageState extends State<HomePage> {
                             if (text.isEmpty) {
                               _validate = true;
                             } else {
-                              completedItems.add(false);
                               _validate = false;
+                              completedItems.add(false);
                               listItems.add(text);
+                              //SharePrefs.setListItems(listItems);
                               eCtrl.clear();
                             }
                           });
@@ -105,9 +108,11 @@ class _HomePageState extends State<HomePage> {
                               if (eCtrl.text.isEmpty) {
                                 _validate = true;
                               } else {
-                                completedItems.add(false);
                                 _validate = false;
+                                completedItems.add(false);
                                 listItems.add(eCtrl.text);
+                                //SharePrefs.setItemName(eCtrl.text);
+                                //SharePrefs.setListItems(listItems);
                                 eCtrl.clear();
                               }
                             });
