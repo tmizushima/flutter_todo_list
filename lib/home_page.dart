@@ -6,7 +6,6 @@ import 'completed_task_page.dart';
 var homePageKey = GlobalKey<_HomePageState>();
 
 List<String> listItems = [];
-// SharePrefs.getListItems()
 List<bool> completedItems = [];
 
 class HomePage extends StatefulWidget {
@@ -18,7 +17,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _validate = false;
-  final TextEditingController eCtrl = new TextEditingController();
+  final TextEditingController eCtrl = TextEditingController();
+
+  void _init() async {
+    await SharePrefs.setInstance();
+    listItems = SharePrefs.getListItems();
+    print("----====================================Instance SET");
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -75,14 +87,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                         autocorrect: true,
                         onSubmitted: (text) {
-                          setState(() {
+                          setState(() async {
                             if (text.isEmpty) {
                               _validate = true;
                             } else {
+                              print("-----------------------------");
                               _validate = false;
                               completedItems.add(false);
                               listItems.add(text);
-                              //SharePrefs.setListItems(listItems);
+                              await SharePrefs.setListItems(listItems);
+                              print(listItems);
+                              print(
+                                  "----------from submit button-------------");
                               eCtrl.clear();
                             }
                           });
@@ -92,27 +108,29 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       height: 70,
                       child: RaisedButton(
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(25.7)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.7)),
                         onPressed: () {},
                         color: Colors.blueAccent,
-                        child: new IconButton(
-                          padding: new EdgeInsets.symmetric(vertical: 10.0),
+                        child: IconButton(
+                          padding: EdgeInsets.symmetric(vertical: 10.0),
                           color: Colors.white,
                           hoverColor: Colors.white,
                           icon: Icon(
                             IconData(57669, fontFamily: 'MaterialIcons'),
                           ),
                           onPressed: () {
-                            setState(() {
+                            setState(() async {
                               if (eCtrl.text.isEmpty) {
                                 _validate = true;
                               } else {
                                 _validate = false;
                                 completedItems.add(false);
                                 listItems.add(eCtrl.text);
-                                //SharePrefs.setItemName(eCtrl.text);
-                                //SharePrefs.setListItems(listItems);
+                                await SharePrefs.setListItems(listItems);
+                                print(listItems);
+                                print(
+                                    "------------from Icon Button--------------");
                                 eCtrl.clear();
                               }
                             });
@@ -124,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: new ListView.builder(
+                child: ListView.builder(
                   itemCount: listItems.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
@@ -144,6 +162,7 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     listItems.removeAt(index);
                                     completedItems.removeAt(index);
+                                    SharePrefs.setListItems(listItems);
                                     setState(() {});
                                   }),
                             ),
