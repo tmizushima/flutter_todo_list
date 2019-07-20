@@ -24,6 +24,10 @@ class CompletedTasks extends StatelessWidget {
                   ),
                 ],
               );
+            } else {
+              return Center(
+                child: Text("No completed tasks yet"),
+              );
             }
           }),
     );

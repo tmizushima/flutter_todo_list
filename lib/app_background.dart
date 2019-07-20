@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 class AppBackgroundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,14 +9,17 @@ class AppBackgroundPage extends StatelessWidget {
 
       return Stack(
         children: <Widget>[
+          Container(
+            color: Color(0xFFE4E6F1),
+          ),
           Positioned(
             right: (height / 9 - height / 2),
             top: -height * 0.09,
             child: Container(
               height: height,
               width: width,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: firstCircle),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white.withOpacity(0.5)),
             ),
           ),
           Positioned(
@@ -27,8 +28,8 @@ class AppBackgroundPage extends StatelessWidget {
             child: Container(
               height: height,
               width: width,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: secondCircle),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white.withOpacity(0.4)),
             ),
           ),
           Positioned(
@@ -37,8 +38,8 @@ class AppBackgroundPage extends StatelessWidget {
             child: Container(
               height: height,
               width: width,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: thirdCircle),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white.withOpacity(0.2)),
             ),
           ),
         ],
