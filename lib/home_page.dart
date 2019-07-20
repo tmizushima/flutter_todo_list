@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'app_background.dart';
+import 'completed_task_page.dart';
 
 var homePageKey = GlobalKey<_HomePageState>();
 
+List<String> listItems = [];
+List<bool> completedItems = [];
+
 class HomePage extends StatefulWidget {
-  final List<String> listItems;
-  final List<bool> completedItems;
-  const HomePage({Key key, this.listItems, this.completedItems})
-      : super(key: key);
+  const HomePage({Key key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   bool _validate = false;
-  List<List<String>> list = [[]];
-  List<String> listItems = [];
-  List<bool> completedItems = [];
   final TextEditingController eCtrl = new TextEditingController();
 
   @override
@@ -28,17 +27,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         title: Text("To Do list App"),
         backgroundColor: Colors.blueAccent,
         actions: <Widget>[
-          new IconButton(
+          IconButton(
             icon: Icon(Icons.list),
             onPressed: () {
               setState(() {});
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => new CompletedTasks(),
+                  builder: (context) => CompletedTasks(),
                 ),
               );
             },
@@ -175,35 +174,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CompletedTasks extends StatelessWidget {
-  final HomePage listItems;
-
-  CompletedTasks({Key key, this.listItems}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: Text("Completed Tasks"),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: new ListView.builder(
-          itemCount: widget.listItems.length,
-          itemBuilder: (BuildContext context, int index) {
-            return new Column(
-              children: <Widget>[
-                new Divider(
-                  height: 10.0,
-                ),
-                new ListTile(
-                  title: Text(widget.listItems[index]),
-                )
-              ],
-            );
-          }),
     );
   }
 }
