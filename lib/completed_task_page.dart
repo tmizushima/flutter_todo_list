@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_app/app_background.dart';
 import 'home_page.dart';
 
 class CompletedTasks extends StatelessWidget {
@@ -9,26 +10,36 @@ class CompletedTasks extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Completed Tasks"),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.greenAccent,
       ),
-      body: ListView.builder(
-          itemCount: homePageKey.currentState.completedItems.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (homePageKey.currentState.completedItems[index] == 'true') {
-              return Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(homePageKey.currentState.listItems[index]),
-                  ),
-                  Divider(
-                    height: 10.0,
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }),
+      body: Stack(
+        children: <Widget>[
+          AppBackgroundPage(),
+          ListView.builder(
+              itemCount: homePageKey.currentState.completedItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (homePageKey.currentState.completedItems[index] == 'true') {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.all(2.00),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                                const Radius.circular(5.0))),
+                        child: ListTile(
+                          title:
+                              Text(homePageKey.currentState.listItems[index]),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              }),
+        ],
+      ),
     );
   }
 }
