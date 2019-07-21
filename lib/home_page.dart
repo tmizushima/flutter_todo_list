@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sample_app/shared_prefs.dart';
 import 'app_background.dart';
 import 'completed_task_page.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 var homePageKey = GlobalKey<_HomePageState>();
 
@@ -151,56 +152,103 @@ class _HomePageState extends State<HomePage> {
                   itemCount: listItems.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(child: Text(listItems[index])),
-                            Container(
-                              width: 40,
-                              child: InkWell(
-                                  child: Icon(
-                                    Icons.remove_circle,
-                                    color: Colors.redAccent,
-                                  ),
-                                  onTap: () {
-                                    listItems.removeAt(index);
-                                    completedItems.removeAt(index);
+                    return Dismissible(
+                      key: ObjectKey(listItems[index]),
+                      child: Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        child: Container(
+                          margin: const EdgeInsets.all(2.00),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                  const Radius.circular(5.0))),
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Expanded(child: Text(listItems[index])),
+                                Container(
+                                  width: 40,
+                                  child: InkWell(
+                                      child: Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onTap: () {
+                                        listItems.removeAt(index);
+                                        completedItems.removeAt(index);
 
-                                    SharePrefs.setListItems(listItems)
-                                        .then((_) {
-                                      setState(() {});
-                                    });
-                                    SharePrefs.setCompletedItems(completedItems)
-                                        .then((_) {
-                                      setState(() {});
-                                    });
-                                  }),
+                                        SharePrefs.setListItems(listItems)
+                                            .then((_) {
+                                          setState(() {});
+                                        });
+                                        SharePrefs.setCompletedItems(
+                                                completedItems)
+                                            .then((_) {
+                                          setState(() {});
+                                        });
+                                      }),
+                                ),
+                                Container(
+                                    width: 30,
+                                    child: InkWell(
+                                      child: Icon(
+                                        (completedItems[index] == 'false')
+                                            ? Icons.check_box_outline_blank
+                                            : Icons.check_box,
+                                        color: Colors.greenAccent,
+                                      ),
+                                      onTap: () {
+                                        if (completedItems[index] == 'false') {
+                                          completedItems[index] = 'true';
+                                        } else {
+                                          completedItems[index] = 'false';
+                                        }
+                                        setState(() {});
+                                      },
+                                    )),
+                              ],
                             ),
-                            Container(
-                                width: 30,
-                                child: InkWell(
-                                  child: Icon(
-                                    (completedItems[index] == 'false')
-                                        ? Icons.check_box_outline_blank
-                                        : Icons.check_box,
-                                    color: Colors.greenAccent,
-                                  ),
-                                  onTap: () {
-                                    if (completedItems[index] == 'false') {
-                                      completedItems[index] = 'true';
-                                    } else {
-                                      completedItems[index] = 'false';
-                                    }
-                                    setState(() {});
-                                  },
-                                )),
-                          ],
+                            onTap: () {
+                              setState(() {});
+                            },
+                          ),
                         ),
-                        onTap: () {
-                          setState(() {});
-                        },
+                        actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Complete',
+                            color: Colors.greenAccent,
+                            icon: IconData(58826, fontFamily: 'MaterialIcons'),
+                            onTap: () {
+                              if (completedItems[index] == 'false') {
+                                completedItems[index] = 'true';
+                              } else {
+                                completedItems[index] = 'false';
+                              }
+                              setState(() {});
+                            },
+                          )
+                        ],
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              listItems.removeAt(index);
+                              completedItems.removeAt(index);
+
+                              SharePrefs.setListItems(listItems).then((_) {
+                                setState(() {});
+                              });
+                              SharePrefs.setCompletedItems(completedItems)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     );
                   },
