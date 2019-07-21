@@ -9,7 +9,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: "Sample App",
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: HomePage(key: homePageKey),
     );
   }
 }

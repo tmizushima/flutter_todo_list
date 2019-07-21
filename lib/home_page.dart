@@ -5,9 +5,6 @@ import 'completed_task_page.dart';
 
 var homePageKey = GlobalKey<_HomePageState>();
 
-List<String> listItems = [];
-List<bool> completedItems = [];
-
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
 
@@ -16,13 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> listItems = [];
+  List<String> completedItems = [];
+
   bool _validate = false;
+
   final TextEditingController eCtrl = TextEditingController();
 
   void _init() async {
     await SharePrefs.setInstance();
     listItems = SharePrefs.getListItems();
-    print("----====================================Instance SET");
+    completedItems = SharePrefs.getCompletedItems();
     setState(() {});
   }
 
@@ -87,21 +88,22 @@ class _HomePageState extends State<HomePage> {
                         ),
                         autocorrect: true,
                         onSubmitted: (text) {
-                          setState(() async {
-                            if (text.isEmpty) {
-                              _validate = true;
-                            } else {
-                              print("-----------------------------");
-                              _validate = false;
-                              completedItems.add(false);
-                              listItems.add(text);
-                              await SharePrefs.setListItems(listItems);
-                              print(listItems);
-                              print(
-                                  "----------from submit button-------------");
-                              eCtrl.clear();
-                            }
-                          });
+                          if (text.isEmpty) {
+                            _validate = true;
+                            setState(() {});
+                          } else {
+                            _validate = false;
+                            completedItems.add('false');
+                            listItems.add(text);
+                            SharePrefs.setCompletedItems(completedItems)
+                                .then((_) {
+                              setState(() {});
+                            });
+                            SharePrefs.setListItems(listItems).then((_) {
+                              setState(() {});
+                            });
+                            eCtrl.clear();
+                          }
                         },
                       ),
                     ),
@@ -120,20 +122,22 @@ class _HomePageState extends State<HomePage> {
                             IconData(57669, fontFamily: 'MaterialIcons'),
                           ),
                           onPressed: () {
-                            setState(() async {
-                              if (eCtrl.text.isEmpty) {
-                                _validate = true;
-                              } else {
-                                _validate = false;
-                                completedItems.add(false);
-                                listItems.add(eCtrl.text);
-                                await SharePrefs.setListItems(listItems);
-                                print(listItems);
-                                print(
-                                    "------------from Icon Button--------------");
-                                eCtrl.clear();
-                              }
-                            });
+                            if (eCtrl.text.isEmpty) {
+                              _validate = true;
+                              setState(() {});
+                            } else {
+                              _validate = false;
+                              completedItems.add('false');
+                              listItems.add(eCtrl.text);
+                              SharePrefs.setListItems(listItems).then((_) {
+                                setState(() {});
+                              });
+                              SharePrefs.setCompletedItems(completedItems)
+                                  .then((_) {
+                                setState(() {});
+                              });
+                              eCtrl.clear();
+                            }
                           },
                         ),
                       ),
@@ -162,24 +166,31 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     listItems.removeAt(index);
                                     completedItems.removeAt(index);
-                                    SharePrefs.setListItems(listItems);
-                                    setState(() {});
+
+                                    SharePrefs.setListItems(listItems)
+                                        .then((_) {
+                                      setState(() {});
+                                    });
+                                    SharePrefs.setCompletedItems(completedItems)
+                                        .then((_) {
+                                      setState(() {});
+                                    });
                                   }),
                             ),
                             Container(
                                 width: 30,
                                 child: InkWell(
                                   child: Icon(
-                                    (completedItems[index] == false)
+                                    (completedItems[index] == 'false')
                                         ? Icons.check_box_outline_blank
                                         : Icons.check_box,
                                     color: Colors.greenAccent,
                                   ),
                                   onTap: () {
-                                    if (completedItems[index] == false) {
-                                      completedItems[index] = true;
+                                    if (completedItems[index] == 'false') {
+                                      completedItems[index] = 'true';
                                     } else {
-                                      completedItems[index] = false;
+                                      completedItems[index] = 'false';
                                     }
                                     setState(() {});
                                   },

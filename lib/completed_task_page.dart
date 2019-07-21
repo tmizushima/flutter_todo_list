@@ -5,19 +5,19 @@ class CompletedTasks extends StatelessWidget {
   CompletedTasks({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text("Completed Tasks"),
         backgroundColor: Colors.blueAccent,
       ),
       body: ListView.builder(
-          itemCount: completedItems.length,
+          itemCount: homePageKey.currentState.completedItems.length,
           itemBuilder: (BuildContext context, int index) {
-            if (completedItems[index]) {
+            if (homePageKey.currentState.completedItems[index] == 'true') {
               return Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(listItems[index]),
+                    title: Text(homePageKey.currentState.listItems[index]),
                   ),
                   Divider(
                     height: 10.0,
@@ -25,7 +25,7 @@ class CompletedTasks extends StatelessWidget {
                 ],
               );
             } else {
-              return Center();
+              return Container();
             }
           }),
     );
