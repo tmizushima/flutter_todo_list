@@ -216,19 +216,35 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         actions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Complete',
-                            color: Colors.greenAccent,
-                            icon: IconData(58826, fontFamily: 'MaterialIcons'),
-                            onTap: () {
-                              if (completedItems[index] == 'false') {
-                                completedItems[index] = 'true';
-                              } else {
-                                completedItems[index] = 'false';
-                              }
-                              setState(() {});
-                            },
-                          )
+                          (completedItems[index] == 'false')
+                              ? IconSlideAction(
+                                  caption: 'Complete',
+                                  color: Colors.greenAccent,
+                                  icon: IconData(58826,
+                                      fontFamily: 'MaterialIcons'),
+                                  onTap: () {
+                                    if (completedItems[index] == 'false') {
+                                      completedItems[index] = 'true';
+                                    } else {
+                                      completedItems[index] = 'false';
+                                    }
+                                    setState(() {});
+                                  },
+                                )
+                              : IconSlideAction(
+                                  caption: 'Undo',
+                                  color: Colors.grey,
+                                  icon: IconData(58826,
+                                      fontFamily: 'MaterialIcons'),
+                                  onTap: () {
+                                    if (completedItems[index] == 'false') {
+                                      completedItems[index] = 'true';
+                                    } else {
+                                      completedItems[index] = 'false';
+                                    }
+                                    setState(() {});
+                                  },
+                                )
                         ],
                         secondaryActions: <Widget>[
                           IconSlideAction(
