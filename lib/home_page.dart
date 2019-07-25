@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sample_app/interface_page.dart';
+import 'package:flutter_sample_app/pages/green_page.dart';
+import 'package:flutter_sample_app/pages/red_page.dart';
+import 'package:flutter_sample_app/pages/yellow_page.dart';
 import 'app_background.dart';
 import 'completed_task_page.dart';
 
@@ -19,7 +21,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    controller = TabController(vsync: this, initialIndex: 1, length: 3);
+    controller = new TabController(vsync: this, initialIndex: 1, length: 3);
   }
 
   @override
@@ -27,6 +29,7 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         title: Text("To Do list App"),
         elevation: 0.7,
         backgroundColor: Colors.blueAccent,
@@ -34,34 +37,64 @@ class _HomePageState extends State<HomePage>
           controller: controller,
           indicatorColor: Colors.white,
           tabs: <Widget>[
-            Tab(text: 'blue'),
-            Tab(text: 'yellow'),
-            Tab(text: 'red'),
+            Tab(
+              child: Icon(
+                Icons.crop_square,
+                color: Colors.greenAccent,
+              ),
+            ),
+            Tab(
+              child: Icon(
+                Icons.crop_square,
+                color: Colors.yellowAccent,
+              ),
+            ),
+            Tab(
+              child: Icon(
+                Icons.crop_square,
+                color: Colors.redAccent,
+              ),
+            ),
           ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: () {
-              setState(() {});
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CompletedTasks(),
-                ),
-              );
-            },
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(Icons.list),
+        //     onPressed: () {
+        //       setState(() {});
+        //       Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //           builder: (context) => CompletedTasks(
+        //             key: completedTaskKey,
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
       body: Stack(
         children: <Widget>[
           AppBackgroundPage(),
-          // TabBarView(
-          //   children: <Widget>[
-
-          //   ],),
-          InterfacePage(
-            key: interfacePageKey,
+          TabBarView(
+            controller: controller,
+            children: <Widget>[
+              Container(
+                child: GreenPage(
+                  key: greenPageKey,
+                ),
+              ),
+              Container(
+                child: YellowPage(
+                  key: yellowPageKey,
+                ),
+              ),
+              Container(
+                child: RedPage(
+                  key: redPageKey,
+                ),
+              ),
+            ],
           ),
         ],
       ),
