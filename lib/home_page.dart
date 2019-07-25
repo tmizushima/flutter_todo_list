@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage>
         //   IconButton(
         //     icon: Icon(Icons.list),
         //     onPressed: () {
-        //       setState(() {});
         //       Navigator.of(context).push(
         //         MaterialPageRoute(
         //           builder: (context) => CompletedTasks(
@@ -69,6 +68,7 @@ class _HomePageState extends State<HomePage>
         //           ),
         //         ),
         //       );
+        //       setState(() {});
         //     },
         //   ),
         // ],

@@ -7,6 +7,7 @@ class SharePrefs {
   static final yellow_completed_Items = "yellow_completed_items";
   static final red_list_Items = "red_list_items";
   static final red_completed_Items = "red_completed_items";
+
   static SharedPreferences _sharedPreferences;
 
   static Future setInstance() async {
