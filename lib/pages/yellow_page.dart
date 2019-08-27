@@ -8,24 +8,26 @@ var yellowPageKey = GlobalKey<_YellowPageState>();
 
 class YellowPage extends StatefulWidget {
   final HomePage controller;
-  const YellowPage({Key key, this.controller}) : super(key: key);
+  final yellowListItems;
+  final yellowCompletedItems;
+  const YellowPage(
+      {Key key,
+      this.controller,
+      this.yellowListItems,
+      this.yellowCompletedItems})
+      : super(key: key);
 
   @override
   _YellowPageState createState() => _YellowPageState();
 }
 
 class _YellowPageState extends State<YellowPage> {
-  List<String> yellowListItems = [];
-  List<String> yellowCompletedItems = [];
-
   bool _validate = false;
 
   final TextEditingController eCtrl = TextEditingController();
 
   void _init() async {
     await SharePrefs.setInstance();
-    yellowListItems = SharePrefs.getYellowListItems();
-    yellowCompletedItems = SharePrefs.getYellowCompletedItems();
     setState(() {});
   }
 
@@ -73,13 +75,15 @@ class _YellowPageState extends State<YellowPage> {
                       setState(() {});
                     } else {
                       _validate = false;
-                      yellowCompletedItems.add('false');
-                      yellowListItems.add(text);
-                      SharePrefs.setYellowCompletedItems(yellowCompletedItems)
+                      widget.yellowCompletedItems.add('false');
+                      widget.yellowListItems.add(text);
+                      SharePrefs.setYellowCompletedItems(
+                              widget.yellowCompletedItems)
                           .then((_) {
                         setState(() {});
                       });
-                      SharePrefs.setYellowListItems(yellowListItems).then((_) {
+                      SharePrefs.setYellowListItems(widget.yellowListItems)
+                          .then((_) {
                         setState(() {});
                       });
                       eCtrl.clear();
@@ -107,13 +111,14 @@ class _YellowPageState extends State<YellowPage> {
                         setState(() {});
                       } else {
                         _validate = false;
-                        yellowCompletedItems.add('false');
-                        yellowListItems.add(eCtrl.text);
-                        SharePrefs.setYellowListItems(yellowListItems)
+                        widget.yellowCompletedItems.add('false');
+                        widget.yellowListItems.add(eCtrl.text);
+                        SharePrefs.setYellowListItems(widget.yellowListItems)
                             .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setYellowCompletedItems(yellowCompletedItems)
+                        SharePrefs.setYellowCompletedItems(
+                                widget.yellowCompletedItems)
                             .then((_) {
                           setState(() {});
                         });
@@ -128,11 +133,11 @@ class _YellowPageState extends State<YellowPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: yellowListItems.length,
+            itemCount: widget.yellowListItems.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               return Dismissible(
-                key: ObjectKey(yellowListItems[index]),
+                key: ObjectKey(widget.yellowListItems[index]),
                 child: Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
@@ -146,7 +151,7 @@ class _YellowPageState extends State<YellowPage> {
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(child: Text(yellowListItems[index])),
+                          Expanded(child: Text(widget.yellowListItems[index])),
                           Container(
                             width: 40,
                             child: InkWell(
@@ -155,14 +160,15 @@ class _YellowPageState extends State<YellowPage> {
                                   color: Colors.redAccent,
                                 ),
                                 onTap: () {
-                                  yellowListItems.removeAt(index);
-                                  yellowCompletedItems.removeAt(index);
-                                  SharePrefs.setYellowListItems(yellowListItems)
+                                  widget.yellowListItems.removeAt(index);
+                                  widget.yellowCompletedItems.removeAt(index);
+                                  SharePrefs.setYellowListItems(
+                                          widget.yellowListItems)
                                       .then((_) {
                                     setState(() {});
                                   });
                                   SharePrefs.setYellowCompletedItems(
-                                          yellowCompletedItems)
+                                          widget.yellowCompletedItems)
                                       .then((_) {
                                     setState(() {});
                                   });
@@ -172,16 +178,19 @@ class _YellowPageState extends State<YellowPage> {
                               width: 30,
                               child: InkWell(
                                 child: Icon(
-                                  (yellowCompletedItems[index] == 'false')
+                                  (widget.yellowCompletedItems[index] ==
+                                          'false')
                                       ? Icons.check_box_outline_blank
                                       : Icons.check_box,
                                   color: Colors.greenAccent,
                                 ),
                                 onTap: () {
-                                  if (yellowCompletedItems[index] == 'false') {
-                                    yellowCompletedItems[index] = 'true';
+                                  if (widget.yellowCompletedItems[index] ==
+                                      'false') {
+                                    widget.yellowCompletedItems[index] = 'true';
                                   } else {
-                                    yellowCompletedItems[index] = 'false';
+                                    widget.yellowCompletedItems[index] =
+                                        'false';
                                   }
                                   setState(() {});
                                 },
@@ -194,16 +203,17 @@ class _YellowPageState extends State<YellowPage> {
                     ),
                   ),
                   actions: <Widget>[
-                    (yellowCompletedItems[index] == 'false')
+                    (widget.yellowCompletedItems[index] == 'false')
                         ? IconSlideAction(
                             caption: 'Complete',
                             color: Colors.greenAccent,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (yellowCompletedItems[index] == 'false') {
-                                yellowCompletedItems[index] = 'true';
+                              if (widget.yellowCompletedItems[index] ==
+                                  'false') {
+                                widget.yellowCompletedItems[index] = 'true';
                               } else {
-                                yellowCompletedItems[index] = 'false';
+                                widget.yellowCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -213,10 +223,11 @@ class _YellowPageState extends State<YellowPage> {
                             color: Colors.grey,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (yellowCompletedItems[index] == 'false') {
-                                yellowCompletedItems[index] = 'true';
+                              if (widget.yellowCompletedItems[index] ==
+                                  'false') {
+                                widget.yellowCompletedItems[index] = 'true';
                               } else {
-                                yellowCompletedItems[index] = 'false';
+                                widget.yellowCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -228,14 +239,14 @@ class _YellowPageState extends State<YellowPage> {
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
-                        yellowListItems.removeAt(index);
-                        yellowCompletedItems.removeAt(index);
-
-                        SharePrefs.setYellowListItems(yellowListItems)
+                        widget.yellowListItems.removeAt(index);
+                        widget.yellowCompletedItems.removeAt(index);
+                        SharePrefs.setYellowListItems(widget.yellowListItems)
                             .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setYellowCompletedItems(yellowCompletedItems)
+                        SharePrefs.setYellowCompletedItems(
+                                widget.yellowCompletedItems)
                             .then((_) {
                           setState(() {});
                         });

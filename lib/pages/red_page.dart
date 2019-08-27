@@ -8,24 +8,23 @@ var redPageKey = GlobalKey<_RedPageState>();
 
 class RedPage extends StatefulWidget {
   final HomePage controller;
-  const RedPage({Key key, this.controller}) : super(key: key);
+  final redListItems;
+  final redCompletedItems;
+  const RedPage(
+      {Key key, this.controller, this.redListItems, this.redCompletedItems})
+      : super(key: key);
 
   @override
   _RedPageState createState() => _RedPageState();
 }
 
 class _RedPageState extends State<RedPage> {
-  List<String> redListItems = [];
-  List<String> redCompletedItems = [];
-
   bool _validate = false;
 
   final TextEditingController eCtrl = TextEditingController();
 
   void _init() async {
     await SharePrefs.setInstance();
-    redListItems = SharePrefs.getRedListItems();
-    redCompletedItems = SharePrefs.getRedCompletedItems();
     setState(() {});
   }
 
@@ -73,13 +72,13 @@ class _RedPageState extends State<RedPage> {
                       setState(() {});
                     } else {
                       _validate = false;
-                      redCompletedItems.add('false');
-                      redListItems.add(text);
-                      SharePrefs.setRedCompletedItems(redCompletedItems)
+                      widget.redCompletedItems.add('false');
+                      widget.redListItems.add(text);
+                      SharePrefs.setRedCompletedItems(widget.redCompletedItems)
                           .then((_) {
                         setState(() {});
                       });
-                      SharePrefs.setRedListItems(redListItems).then((_) {
+                      SharePrefs.setRedListItems(widget.redListItems).then((_) {
                         setState(() {});
                       });
                       eCtrl.clear();
@@ -107,12 +106,14 @@ class _RedPageState extends State<RedPage> {
                         setState(() {});
                       } else {
                         _validate = false;
-                        redCompletedItems.add('false');
-                        redListItems.add(eCtrl.text);
-                        SharePrefs.setRedListItems(redListItems).then((_) {
+                        widget.redCompletedItems.add('false');
+                        widget.redListItems.add(eCtrl.text);
+                        SharePrefs.setRedListItems(widget.redListItems)
+                            .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setRedCompletedItems(redCompletedItems)
+                        SharePrefs.setRedCompletedItems(
+                                widget.redCompletedItems)
                             .then((_) {
                           setState(() {});
                         });
@@ -127,11 +128,11 @@ class _RedPageState extends State<RedPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: redListItems.length,
+            itemCount: widget.redListItems.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               return Dismissible(
-                key: ObjectKey(redListItems[index]),
+                key: ObjectKey(widget.redListItems[index]),
                 child: Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
@@ -145,7 +146,7 @@ class _RedPageState extends State<RedPage> {
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(child: Text(redListItems[index])),
+                          Expanded(child: Text(widget.redListItems[index])),
                           Container(
                             width: 40,
                             child: InkWell(
@@ -154,14 +155,15 @@ class _RedPageState extends State<RedPage> {
                                   color: Colors.redAccent,
                                 ),
                                 onTap: () {
-                                  redListItems.removeAt(index);
-                                  redCompletedItems.removeAt(index);
-                                  SharePrefs.setRedListItems(redListItems)
+                                  widget.redListItems.removeAt(index);
+                                  widget.redCompletedItems.removeAt(index);
+                                  SharePrefs.setRedListItems(
+                                          widget.redListItems)
                                       .then((_) {
                                     setState(() {});
                                   });
                                   SharePrefs.setRedCompletedItems(
-                                          redCompletedItems)
+                                          widget.redCompletedItems)
                                       .then((_) {
                                     setState(() {});
                                   });
@@ -171,16 +173,17 @@ class _RedPageState extends State<RedPage> {
                               width: 30,
                               child: InkWell(
                                 child: Icon(
-                                  (redCompletedItems[index] == 'false')
+                                  (widget.redCompletedItems[index] == 'false')
                                       ? Icons.check_box_outline_blank
                                       : Icons.check_box,
                                   color: Colors.greenAccent,
                                 ),
                                 onTap: () {
-                                  if (redCompletedItems[index] == 'false') {
-                                    redCompletedItems[index] = 'true';
+                                  if (widget.redCompletedItems[index] ==
+                                      'false') {
+                                    widget.redCompletedItems[index] = 'true';
                                   } else {
-                                    redCompletedItems[index] = 'false';
+                                    widget.redCompletedItems[index] = 'false';
                                   }
                                   setState(() {});
                                 },
@@ -193,16 +196,16 @@ class _RedPageState extends State<RedPage> {
                     ),
                   ),
                   actions: <Widget>[
-                    (redCompletedItems[index] == 'false')
+                    (widget.redCompletedItems[index] == 'false')
                         ? IconSlideAction(
                             caption: 'Complete',
                             color: Colors.greenAccent,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (redCompletedItems[index] == 'false') {
-                                redCompletedItems[index] = 'true';
+                              if (widget.redCompletedItems[index] == 'false') {
+                                widget.redCompletedItems[index] = 'true';
                               } else {
-                                redCompletedItems[index] = 'false';
+                                widget.redCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -212,10 +215,10 @@ class _RedPageState extends State<RedPage> {
                             color: Colors.grey,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (redCompletedItems[index] == 'false') {
-                                redCompletedItems[index] = 'true';
+                              if (widget.redCompletedItems[index] == 'false') {
+                                widget.redCompletedItems[index] = 'true';
                               } else {
-                                redCompletedItems[index] = 'false';
+                                widget.redCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -227,13 +230,15 @@ class _RedPageState extends State<RedPage> {
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
-                        redListItems.removeAt(index);
-                        redCompletedItems.removeAt(index);
+                        widget.redListItems.removeAt(index);
+                        widget.redCompletedItems.removeAt(index);
 
-                        SharePrefs.setRedListItems(redListItems).then((_) {
+                        SharePrefs.setRedListItems(widget.redListItems)
+                            .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setRedCompletedItems(redCompletedItems)
+                        SharePrefs.setRedCompletedItems(
+                                widget.redCompletedItems)
                             .then((_) {
                           setState(() {});
                         });

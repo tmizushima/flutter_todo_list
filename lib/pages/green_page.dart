@@ -8,24 +8,24 @@ var greenPageKey = GlobalKey<_GreenPageState>();
 
 class GreenPage extends StatefulWidget {
   final HomePage controller;
-  const GreenPage({Key key, this.controller}) : super(key: key);
+  final greenListItems;
+  final greenCompletedItems;
+
+  const GreenPage(
+      {Key key, this.controller, this.greenListItems, this.greenCompletedItems})
+      : super(key: key);
 
   @override
   _GreenPageState createState() => _GreenPageState();
 }
 
 class _GreenPageState extends State<GreenPage> {
-  List<String> greenListItems = [];
-  List<String> greenCompletedItems = [];
-
   bool _validate = false;
 
   final TextEditingController eCtrl = TextEditingController();
 
   void _init() async {
     await SharePrefs.setInstance();
-    greenListItems = SharePrefs.getGreenListItems();
-    greenCompletedItems = SharePrefs.getGreenCompletedItems();
     setState(() {});
   }
 
@@ -73,13 +73,15 @@ class _GreenPageState extends State<GreenPage> {
                       setState(() {});
                     } else {
                       _validate = false;
-                      greenCompletedItems.add('false');
-                      greenListItems.add(text);
-                      SharePrefs.setGreenCompletedItems(greenCompletedItems)
+                      widget.greenCompletedItems.add('false');
+                      widget.greenListItems.add(text);
+                      SharePrefs.setGreenCompletedItems(
+                              widget.greenCompletedItems)
                           .then((_) {
                         setState(() {});
                       });
-                      SharePrefs.setGreenListItems(greenListItems).then((_) {
+                      SharePrefs.setGreenListItems(widget.greenListItems)
+                          .then((_) {
                         setState(() {});
                       });
                       eCtrl.clear();
@@ -107,12 +109,14 @@ class _GreenPageState extends State<GreenPage> {
                         setState(() {});
                       } else {
                         _validate = false;
-                        greenCompletedItems.add('false');
-                        greenListItems.add(eCtrl.text);
-                        SharePrefs.setGreenListItems(greenListItems).then((_) {
+                        widget.greenCompletedItems.add('false');
+                        widget.greenListItems.add(eCtrl.text);
+                        SharePrefs.setGreenListItems(widget.greenListItems)
+                            .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setGreenCompletedItems(greenCompletedItems)
+                        SharePrefs.setGreenCompletedItems(
+                                widget.greenCompletedItems)
                             .then((_) {
                           setState(() {});
                         });
@@ -127,11 +131,11 @@ class _GreenPageState extends State<GreenPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: greenListItems.length,
+            itemCount: widget.greenListItems.length ?? 0,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               return Dismissible(
-                key: ObjectKey(greenListItems[index]),
+                key: ObjectKey(widget.greenListItems[index]),
                 child: Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
@@ -145,7 +149,7 @@ class _GreenPageState extends State<GreenPage> {
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(child: Text(greenListItems[index])),
+                          Expanded(child: Text(widget.greenListItems[index])),
                           Container(
                             width: 40,
                             child: InkWell(
@@ -154,14 +158,15 @@ class _GreenPageState extends State<GreenPage> {
                                   color: Colors.redAccent,
                                 ),
                                 onTap: () {
-                                  greenListItems.removeAt(index);
-                                  greenCompletedItems.removeAt(index);
-                                  SharePrefs.setGreenListItems(greenListItems)
+                                  widget.greenListItems.removeAt(index);
+                                  widget.greenCompletedItems.removeAt(index);
+                                  SharePrefs.setGreenListItems(
+                                          widget.greenListItems)
                                       .then((_) {
                                     setState(() {});
                                   });
                                   SharePrefs.setGreenCompletedItems(
-                                          greenCompletedItems)
+                                          widget.greenCompletedItems)
                                       .then((_) {
                                     setState(() {});
                                   });
@@ -171,16 +176,17 @@ class _GreenPageState extends State<GreenPage> {
                               width: 30,
                               child: InkWell(
                                 child: Icon(
-                                  (greenCompletedItems[index] == 'false')
+                                  (widget.greenCompletedItems[index] == 'false')
                                       ? Icons.check_box_outline_blank
                                       : Icons.check_box,
                                   color: Colors.greenAccent,
                                 ),
                                 onTap: () {
-                                  if (greenCompletedItems[index] == 'false') {
-                                    greenCompletedItems[index] = 'true';
+                                  if (widget.greenCompletedItems[index] ==
+                                      'false') {
+                                    widget.greenCompletedItems[index] = 'true';
                                   } else {
-                                    greenCompletedItems[index] = 'false';
+                                    widget.greenCompletedItems[index] = 'false';
                                   }
                                   setState(() {});
                                 },
@@ -193,16 +199,17 @@ class _GreenPageState extends State<GreenPage> {
                     ),
                   ),
                   actions: <Widget>[
-                    (greenCompletedItems[index] == 'false')
+                    (widget.greenCompletedItems[index] == 'false')
                         ? IconSlideAction(
                             caption: 'Complete',
                             color: Colors.greenAccent,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (greenCompletedItems[index] == 'false') {
-                                greenCompletedItems[index] = 'true';
+                              if (widget.greenCompletedItems[index] ==
+                                  'false') {
+                                widget.greenCompletedItems[index] = 'true';
                               } else {
-                                greenCompletedItems[index] = 'false';
+                                widget.greenCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -212,10 +219,11 @@ class _GreenPageState extends State<GreenPage> {
                             color: Colors.grey,
                             icon: IconData(58826, fontFamily: 'MaterialIcons'),
                             onTap: () {
-                              if (greenCompletedItems[index] == 'false') {
-                                greenCompletedItems[index] = 'true';
+                              if (widget.greenCompletedItems[index] ==
+                                  'false') {
+                                widget.greenCompletedItems[index] = 'true';
                               } else {
-                                greenCompletedItems[index] = 'false';
+                                widget.greenCompletedItems[index] = 'false';
                               }
                               setState(() {});
                             },
@@ -227,13 +235,15 @@ class _GreenPageState extends State<GreenPage> {
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
-                        greenListItems.removeAt(index);
-                        greenCompletedItems.removeAt(index);
+                        widget.greenListItems.removeAt(index);
+                        widget.greenCompletedItems.removeAt(index);
 
-                        SharePrefs.setGreenListItems(greenListItems).then((_) {
+                        SharePrefs.setGreenListItems(widget.greenListItems)
+                            .then((_) {
                           setState(() {});
                         });
-                        SharePrefs.setGreenCompletedItems(greenCompletedItems)
+                        SharePrefs.setGreenCompletedItems(
+                                widget.greenCompletedItems)
                             .then((_) {
                           setState(() {});
                         });
