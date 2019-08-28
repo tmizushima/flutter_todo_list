@@ -24,14 +24,8 @@ class _GreenPageState extends State<GreenPage> {
 
   final TextEditingController eCtrl = TextEditingController();
 
-  void _init() async {
-    await SharePrefs.setInstance();
-    setState(() {});
-  }
-
   @override
   void initState() {
-    _init();
     super.initState();
   }
 
