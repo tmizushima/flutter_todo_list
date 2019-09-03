@@ -20,6 +20,34 @@ shared_preferencesは端末上に文字列などの複雑なデータを保存�
 Shared Preferenceを使用するためのファイルを作成します。のちに各ページで利用するメソッドをここで作成し、utilitiesとして参照します。
 -shared_prefs.dart
 
+###-utils- Shared preferenceを利用してメソッドを作成
+---shared_prefs.dart
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SharePrefs {
+    //ここで文字列の型を作成します。あとはパーケージが保存してくれます。
+  static final list_Items = "list_items";
+  static final completed_Items = "completed_items";
+  static SharedPreferences _sharedPreferences;
+
+  static Future setInstance() async {
+    if (null != _sharedPreferences) return;
+    _sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  static Future<bool> setListItems(List<String> value) =>
+      _sharedPreferences.setStringList(list_Items, value);
+  static List<String> getListItems() =>
+      _sharedPreferences.getStringList(list_Items) ?? [];
+
+  static Future<bool> setCompletedItems(List<String> value) =>
+      _sharedPreferences.setStringList(completed_Items, value);
+  static List<String> getCompletedItems() =>
+      _sharedPreferences.getStringList(completed_Items) ?? [];
+}
+---
+
+
 ---main.dart
 import 'package:flutter/material.dart';
 import 'home_page.dart';
@@ -38,11 +66,10 @@ class MainApp extends StatelessWidget {
 }
 ---
 
-###homepageの作成
+###-Page1-homepageの作成
 ---home_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_todoList_app/shared_prefs.dart';
-import 'app_background.dart';
 import 'completed_task_page.dart';
 
 var homePageKey = GlobalKey<_HomePageState>();
@@ -63,6 +90,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController eCtrl = TextEditingController();
 
   void _init() async {
+      //インスタンスを取得
     await SharePrefs.setInstance();
     listItems = SharePrefs.getListItems();
     completedItems = SharePrefs.getCompletedItems();
@@ -77,6 +105,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+      //ページがdispose（ページの切り替え？）が起きたときに
+      //コントローラーの中身を削除する
     eCtrl.dispose();
     super.dispose();
   }
@@ -103,7 +133,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: <Widget>[
-          AppBackgroundPage(),
           Column(
             children: <Widget>[
               Container(
@@ -255,7 +284,7 @@ class _HomePageState extends State<HomePage> {
 }
 ---
 
-###Completed tasksをDrawerにリスト表示する
+###-Page2-Completed tasksをDrawerにリスト表示する
 ---completed_task_page.dart
 import 'package:flutter/material.dart';
 import 'home_page.dart';
@@ -292,41 +321,13 @@ class CompletedTasks extends StatelessWidget {
 }
 ---
 
----shared_prefs.dart
-import 'package:shared_preferences/shared_preferences.dart';
-
-class SharePrefs {
-  static final list_Items = "list_items";
-  static final completed_Items = "completed_items";
-  static SharedPreferences _sharedPreferences;
-
-  static Future setInstance() async {
-    if (null != _sharedPreferences) return;
-    _sharedPreferences = await SharedPreferences.getInstance();
-  }
-
-  static Future<bool> setListItems(List<String> value) =>
-      _sharedPreferences.setStringList(list_Items, value);
-  static List<String> getListItems() =>
-      _sharedPreferences.getStringList(list_Items) ?? [];
-
-  static Future<bool> setCompletedItems(List<String> value) =>
-      _sharedPreferences.setStringList(completed_Items, value);
-  static List<String> getCompletedItems() =>
-      _sharedPreferences.getStringList(completed_Items) ?? [];
-}
----
 
 #まとめ
+私もFlutterは締めたばかりなので、うまく説明できていないかもしれませんがよろしくお願いします。
 はじめは少々難しいかもしれませんが、Flutterのチュートリアルを終えて新しいアプリを作ってみたいという方にお勧めです
+次回はリストを３つに増やし、重要度別にカテゴリーわけしたいと思います。
+なにか改ざん点や、修正箇所、ご指摘があればよろしくお願いいたします。
 
 #参照
 ##コードを参照
 - [TodoList App](https://github.com/Renkon117/flutter_todo_list.git/)
-
-
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
