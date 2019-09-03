@@ -35,6 +35,9 @@ class SharePrefs {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
+  //setStringList()によって変更されたデータを更新し、新しいデータが方に保存されます。
+  //getStringList()はinitState()(そのページに切り替わったとき)、Shared Preferenceから保存されたデータを呼び出す役割をします。
+
   static Future<bool> setListItems(List<String> value) =>
       _sharedPreferences.setStringList(list_Items, value);
   static List<String> getListItems() =>
@@ -46,7 +49,6 @@ class SharePrefs {
       _sharedPreferences.getStringList(completed_Items) ?? [];
 }
 ---
-
 
 ---main.dart
 import 'package:flutter/material.dart';
@@ -92,6 +94,7 @@ class _HomePageState extends State<HomePage> {
   void _init() async {
       //インスタンスを取得
     await SharePrefs.setInstance();
+    //Listにデータを取得させる
     listItems = SharePrefs.getListItems();
     completedItems = SharePrefs.getCompletedItems();
     setState(() {});
@@ -201,6 +204,7 @@ class _HomePageState extends State<HomePage> {
                               completedItems.add('false');
                               listItems.add(eCtrl.text);
                               SharePrefs.setListItems(listItems).then((_) {
+                                  //setStateで現在いるページのStateを更新する。
                                 setState(() {});
                               });
                               SharePrefs.setCompletedItems(completedItems)
@@ -299,6 +303,7 @@ class CompletedTasks extends StatelessWidget {
         backgroundColor: Colors.blueAccent,
       ),
       body: ListView.builder(
+          //globalKeyを使って他ページから変数を参照する
           itemCount: homePageKey.currentState.completedItems.length,
           itemBuilder: (BuildContext context, int index) {
             if (homePageKey.currentState.completedItems[index] == 'true') {
